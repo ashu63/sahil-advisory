@@ -35,6 +35,13 @@ export const metadata: Metadata = {
     description:
       "Accurate advice. Practical strategies. Trusted support. Expert Tax, Audit & Business Consultancy in Chandigarh.",
     type: "website",
+    siteName: "Sahil Advisory",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sahil Advisory | Cost Accountants",
+    description:
+      "Tax, Audit, Accounting & Business Consultancy. Chandigarh & Panchkula.",
   },
 };
 
