@@ -11,6 +11,12 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
+  // OG cards render with vendored Geist TTFs read off disk. They are generated
+  // at build time today, but standalone output would not trace a plain
+  // readFile, so an OG route that ever revalidates would 500 without this.
+  outputFileTracingIncludes: {
+    '/**': ['./assets/fonts/**'],
+  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }]
   },

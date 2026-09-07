@@ -28,12 +28,14 @@ Built and type-checked:
 | Leads | `app/api/leads/route.ts`, `app/lib/db/*`, `app/lib/notify/*` | Rate-limited, honeypot. Writes to Supabase, alerts WhatsApp and email after the response. Degrades to logging when unconfigured |
 | SEO plumbing | `app/sitemap.ts`, `app/robots.ts`, `app/api/indexnow/*`, `proxy.ts`, `vercel.json` | Honest lastmod, AI crawlers allowed, daily IndexNow cron, URL junk stripping |
 | Analytics | `app/layout.tsx` | GA4 (`NEXT_PUBLIC_GA_ID`), Clarity (`NEXT_PUBLIC_CLARITY_ID`), Vercel Analytics |
+| OG cards | `app/lib/og.tsx`, `app/**/opengraph-image.tsx` | One `ogCard()` design for all 117 pages. Geist TTFs vendored at `assets/fonts` (satori cannot use the woff2 from `next/font`). Add a route, add its `opengraph-image.tsx` |
 
 Not built yet (Phase 1+): auth, database, cart/checkout, Razorpay, client dashboard, document upload, admin kanban, WhatsApp BSP templates, slot picker, Hindi mirrors, notice upload triage flow.
 
 ## Conventions
 
 - Every indexable route: `buildMetadata({ title ≤ 60, description 145–160, path })` + `<JsonLd>` graph + `<FaqJsonLd>` for FAQs.
+- Every indexable route also needs its own `opengraph-image.tsx`. `buildMetadata()` sets an `openGraph` object, and that stops a parent segment's OG image from being inherited, so a route without its own file ships with no `og:image` at all.
 - Content and catalogue live in typed TS registries under `app/lib`. Adding an entry auto-flows into routes, sitemap, hub pages, footer and IndexNow.
 - Prices in rupees ex-GST; render with `formatINR` in `font-mono tabular`.
 - Copy rules: "expert-assisted" or "qualified professional (CMA/CA)", never "CA-assisted". Audit work is by empanelled CAs. No Hinglish, no emoji, no em-dashes.
