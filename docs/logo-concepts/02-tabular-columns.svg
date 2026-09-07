@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="tabular-columns-title">
+  <title id="tabular-columns-title">Sahil Advisory</title>
+  <!--
+    Concept 2: Tabular columns.
+    Three ascending capsules on a ledger rule. Reads as a cost sheet and as
+    a bar chart. Rhymes with the font-mono tabular money convention.
+    navy-900 #0b1f3a  green-600 #059669
+  -->
+  <rect x="20" y="64" width="20" height="30" rx="10" fill="#0b1f3a" />
+  <rect x="54" y="42" width="20" height="52" rx="10" fill="#0b1f3a" />
+  <rect x="88" y="16" width="20" height="78" rx="10" fill="#059669" />
+  <path d="M19 108 H109" stroke="#0b1f3a" stroke-width="11" stroke-linecap="round" />
+</svg>

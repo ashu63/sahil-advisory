@@ -25,7 +25,7 @@ Built and type-checked:
 | Guides | `app/lib/guides/*` | Typed content blocks, 13 guides across 8 clusters, `plannedCount` gap tracking |
 | Experts | `app/lib/experts.ts` | 1 published (CMA lead). CA partners hidden until confirmed |
 | Routes | `app/**` | Home, services hub, 6 category pages, 45 SKU pages, pricing, consult, calculators, due-dates, guides, experts, about, contact, 7 legal/trust pages, 404 |
-| Leads | `app/api/leads/route.ts`, `app/components/CallbackForm.tsx` | Rate-limited, honeypot, emails via Resend if `RESEND_API_KEY` set, always logged |
+| Leads | `app/api/leads/route.ts`, `app/lib/db/*`, `app/lib/notify/*` | Rate-limited, honeypot. Writes to Supabase, alerts WhatsApp and email after the response. Degrades to logging when unconfigured |
 | SEO plumbing | `app/sitemap.ts`, `app/robots.ts`, `app/api/indexnow/*`, `proxy.ts`, `vercel.json` | Honest lastmod, AI crawlers allowed, daily IndexNow cron, URL junk stripping |
 | Analytics | `app/layout.tsx` | GA4 (`NEXT_PUBLIC_GA_ID`), Clarity (`NEXT_PUBLIC_CLARITY_ID`), Vercel Analytics |
 
@@ -82,9 +82,12 @@ cost audit line is a genuine differentiator: it is work a CA cannot sign.
 
 ## Backend
 
-Not built yet. The design, the data model and the build order are in
-`docs/BACKEND.md`. The immediate gap: `RESEND_API_KEY` is unset in production,
-so callback-form leads reach nothing but Vercel's runtime logs.
+Design and build order: `docs/BACKEND.md`.
+
+**Step 1 is built** (leads to Supabase plus a WhatsApp alert) but is dormant
+until the environment variables are set. Setup steps: `docs/SETUP-LEADS.md`.
+Until then leads reach only Vercel's runtime logs. Steps 2 onward (auth,
+orders, payments, portals) are not started.
 
 ## Verification commands
 

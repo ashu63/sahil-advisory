@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="ledger-tick-title">
+  <title id="ledger-tick-title">Sahil Advisory</title>
+  <!--
+    Concept 1: Ledger tick.
+    A check crossing a ledger rule. The short arm is navy (the entry),
+    the long arm is emerald (the verification). The rule is what makes it
+    a line item rather than a generic checkmark.
+    navy-900 #0b1f3a  green-600 #059669
+  -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 60 L48 82" stroke="#0b1f3a" stroke-width="14" />
+    <path d="M48 82 L104 20" stroke="#059669" stroke-width="14" />
+    <path d="M19 108 H109" stroke="#0b1f3a" stroke-width="11" />
+  </g>
+</svg>

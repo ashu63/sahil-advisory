@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="bracket-mark-title">
+  <title id="bracket-mark-title">Sahil Advisory</title>
+  <!--
+    Concept 3: Bracket mark.
+    Navy brackets enclosing an emerald tick. Brackets read as "accounted for"
+    and give the strongest silhouette of the three at favicon size.
+    navy-900 #0b1f3a  green-600 #059669
+  -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M42 24 H24 V104 H42" stroke="#0b1f3a" stroke-width="12" />
+    <path d="M86 24 H104 V104 H86" stroke="#0b1f3a" stroke-width="12" />
+    <path d="M44 66 L58 80 L86 46" stroke="#059669" stroke-width="14" />
+  </g>
+</svg>
