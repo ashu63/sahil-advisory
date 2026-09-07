@@ -2,8 +2,24 @@
 // Everything user-facing (footer, JSON-LD, WhatsApp links, metadata) reads
 // from here so an owner change is a one-file edit.
 
-export const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://sahiladvisory.in'
+// Canonical URLs, the sitemap, robots and every JSON-LD @id are built from
+// this, so it must always resolve. Pointing it at a domain that is not
+// connected yet tells Google the real page lives at a dead URL, which stops
+// the site indexing at all.
+//
+// Order: an explicit override wins; otherwise fall back to the Vercel
+// production domain (always set on Vercel at build time) so a deployment is
+// self-consistent before a custom domain exists; localhost for local dev.
+// Set NEXT_PUBLIC_BASE_URL once the real domain is live.
+function resolveBaseUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_BASE_URL?.trim()
+  if (explicit) return explicit.replace(/\/+$/, '')
+  const vercelDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+  if (vercelDomain) return `https://${vercelDomain.replace(/^https?:\/\//, '').replace(/\/+$/, '')}`
+  return 'http://localhost:3000'
+}
+
+export const BASE_URL = resolveBaseUrl()
 
 export const SITE = {
   name: 'Sahil Advisory',
