@@ -1,0 +1,155 @@
+import Link from 'next/link'
+import { ArrowRight, Star, Calculator as CalcIcon, BookOpen, Clock } from 'lucide-react'
+import { Badge, CheckList, PriceTag } from './ui'
+import { servicePath, unitSuffix, type Service, type ServiceCategory } from '@/app/lib/services'
+import type { Expert } from '@/app/lib/experts'
+import type { Testimonial } from '@/app/lib/testimonials'
+import type { CalculatorDef } from '@/app/lib/calculators'
+import type { Guide } from '@/app/lib/guides/types'
+import { guidePath } from '@/app/lib/guides'
+import { whatsappLink } from '@/app/lib/site'
+
+// `hideBadge` is for cross-category grids (the home page featured row), where
+// several category-level "most popular" plans sit together and the badge would
+// lose all meaning by appearing on most of the cards.
+export function PlanCard({ service, compact, hideBadge }: { service: Service; compact?: boolean; hideBadge?: boolean }) {
+  const href = servicePath(service)
+  const wa = whatsappLink(`Hi, I want to get started with ${service.name}.`)
+  const showBadge = service.popular && !hideBadge
+  return (
+    <article
+      className={`relative flex flex-col rounded-2xl border bg-card p-5 sm:p-6 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-lift)] ${
+        showBadge ? 'border-green-600 ring-1 ring-green-600' : 'border-border'
+      }`}
+    >
+      {showBadge && (
+        <span className="absolute -top-3 left-5">
+          <Badge tone="gold">Most popular</Badge>
+        </span>
+      )}
+      <h3 className="text-lg font-bold text-navy-900 leading-snug">
+        <Link href={href} className="hover:text-green-700">{service.name}</Link>
+      </h3>
+      <p className="mt-1 text-xs font-medium text-muted">{service.whoFor}</p>
+      {!compact && <CheckList items={service.includes.slice(0, 3)} className="mt-4" />}
+      <div className="mt-5 border-t border-border pt-4">
+        <PriceTag price={service.price} mrp={service.mrp} unit={unitSuffix(service.unit)} quote={service.price === null ? (service.quoteLabel ?? 'Quote after free triage') : undefined} />
+        <p className="mt-1 flex items-center gap-1 text-xs text-muted">
+          <Clock className="h-3.5 w-3.5" /> {service.turnaroundDays}
+        </p>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <Link href={href} className="rounded-lg border border-border-strong px-3 py-2 text-center text-sm font-semibold text-navy-900 hover:bg-bg-alt">
+          View details
+        </Link>
+        <a href={wa} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-green-700">
+          Get started
+        </a>
+      </div>
+    </article>
+  )
+}
+
+export function CategoryCard({ category, items, href, cta }: { category: Pick<ServiceCategory, 'name'> & { sub: string }; items: string[]; href: string; cta: string }) {
+  return (
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+      <div className="bg-navy-900 px-6 py-5 text-white">
+        <h3 className="text-xl font-bold">{category.name}</h3>
+        <p className="mt-1 text-sm text-white/65">{category.sub}</p>
+      </div>
+      <div className="flex flex-1 flex-col p-6">
+        <CheckList items={items} />
+        <div className="mt-auto pt-6">
+          <Link href={href} className="flex items-center justify-between rounded-lg bg-green-600 px-4 py-3 text-sm font-semibold text-white hover:bg-green-700">
+            {cta} <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export function ExpertCard({ expert, compact }: { expert: Expert; compact?: boolean }) {
+  const initials = expert.name.replace(/^(CMA|CA|CS)\s+/, '').split(' ').map((w) => w[0]).join('').slice(0, 2)
+  return (
+    <article className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-navy-900 text-lg font-bold text-white">{initials}</div>
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="text-base font-bold text-navy-900">
+            <Link href={`/experts/${expert.slug}`} className="hover:text-green-700">{expert.name}</Link>
+          </h3>
+          <Badge tone="navy">{expert.credential}</Badge>
+        </div>
+        <p className="text-xs text-muted">{expert.years}+ years · {expert.languages.join(', ')}</p>
+        {!compact && (
+          <ul className="mt-2 flex flex-wrap gap-1.5">
+            {expert.specialisations.slice(0, 3).map((s) => (
+              <li key={s} className="rounded-md bg-bg-alt px-2 py-0.5 text-[11px] font-medium text-text-2">{s}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </article>
+  )
+}
+
+export function TestimonialCard({ t }: { t: Testimonial }) {
+  return (
+    <figure className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+      <div className="flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
+        {Array.from({ length: t.rating }).map((_, i) => (
+          <Star key={i} className="h-4 w-4 fill-gold-600 text-gold-600" />
+        ))}
+      </div>
+      <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-text-2">“{t.text}”</blockquote>
+      <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-100 text-xs font-bold text-navy-900">
+          {t.name.split(' ').map((w) => w[0]).join('')}
+        </span>
+        <span>
+          <span className="block text-sm font-bold text-navy-900">{t.name}</span>
+          <span className="block text-xs text-muted">
+            {t.role}{t.city ? `, ${t.city}` : ''}{t.service ? ` · ${t.service}` : ''}
+          </span>
+        </span>
+      </figcaption>
+    </figure>
+  )
+}
+
+export function CalculatorCard({ calc }: { calc: Pick<CalculatorDef, 'slug' | 'name' | 'metaDescription' | 'phase'> }) {
+  if (calc.phase !== 0) {
+    return (
+      <div className="flex items-start gap-3 rounded-2xl border border-dashed border-border bg-bg-alt p-5 opacity-80">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-muted"><CalcIcon className="h-4 w-4" /></span>
+        <div>
+          <p className="text-sm font-bold text-navy-900">{calc.name}</p>
+          <p className="text-xs text-muted">Coming soon</p>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <Link href={`/calculators/${calc.slug}`} className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-green-600">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-50 text-green-700"><CalcIcon className="h-4 w-4" /></span>
+      <div>
+        <p className="text-sm font-bold text-navy-900 group-hover:text-green-700">{calc.name}</p>
+        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-text-2">{calc.metaDescription}</p>
+      </div>
+    </Link>
+  )
+}
+
+export function GuideCard({ guide }: { guide: Guide }) {
+  return (
+    <Link href={guidePath(guide)} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-green-600">
+      <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-green-700">
+        <BookOpen className="h-3.5 w-3.5" /> {guide.cluster.replace(/-/g, ' ')}
+      </span>
+      <h3 className="mt-2 text-base font-bold leading-snug text-navy-900 group-hover:text-green-700">{guide.title}</h3>
+      <p className="mt-2 line-clamp-2 text-sm text-text-2">{guide.excerpt}</p>
+      <p className="mt-auto pt-4 text-xs text-muted">{guide.readMinutes} min read · Updated {new Date(guide.dateModified).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+    </Link>
+  )
+}

@@ -1,149 +1,143 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import Link from 'next/link'
+import { Phone, Mail, MapPin, Clock, MessageCircle, Lock } from 'lucide-react'
+import { SITE, FOOTER_DISCLAIMER, WHATSAPP_DEFAULT } from '@/app/lib/site'
+import { LIVE_CALCULATORS } from '@/app/lib/calculators'
 
 const services = [
-  "Income Tax Filing",
-  "GST Registration & Filing",
-  "Company Registration",
-  "MSME & Startup Advisory",
-  "Audit & Assurance",
-  "Bookkeeping & Accounting",
-  "Govt Tender & GeM",
-  "TDS/TCS Compliance",
-];
+  { label: 'ITR Filing', href: '/services/itr' },
+  { label: 'ITR for Salaried', href: '/services/itr/itr-salaried' },
+  { label: 'ITR for F&O Traders', href: '/services/itr/itr-fno-trader' },
+  { label: 'ITR for NRIs', href: '/services/itr/itr-nri' },
+  { label: 'GST Registration', href: '/services/gst/gst-registration' },
+  { label: 'GST Return Filing', href: '/services/gst' },
+  { label: 'TDS Return Filing', href: '/services/tds' },
+  { label: 'Company Registration', href: '/services/registrations/pvt-ltd-incorporation' },
+  { label: 'CMA Report for Bank Loan', href: '/services/registrations/cma-project-report' },
+  { label: 'Tax Audit (44AB)', href: '/services/audit/tax-audit-44ab' },
+  { label: 'Cost Audit (Section 148)', href: '/services/audit/cost-audit-148' },
+  { label: 'Tax Notice Reply', href: '/services/notices' },
+]
 
-const quickLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "About Us", href: "#about" },
-  { label: "How It Works", href: "#process" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
-];
+const resources = [
+  { label: 'All calculators', href: '/calculators' },
+  { label: 'Tax guides', href: '/guides' },
+  { label: 'Due dates calendar', href: '/due-dates' },
+  { label: 'ITR filing last date', href: '/due-dates/itr-filing-last-date' },
+  { label: 'GSTR-3B due date', href: '/due-dates/gstr-3b-due-date' },
+  { label: 'Advance tax due dates', href: '/due-dates/advance-tax-due-date' },
+]
+
+const company = [
+  { label: 'About', href: '/about' },
+  { label: 'Our experts', href: '/experts' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Book a consultation', href: '/consult' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Security and privacy', href: '/trust' },
+]
+
+const legal = [
+  { label: 'Privacy policy', href: '/privacy-policy' },
+  { label: 'Terms of service', href: '/terms' },
+  { label: 'Refund policy', href: '/refund-policy' },
+  { label: 'Cancellation policy', href: '/cancellation-policy' },
+  { label: 'Data deletion', href: '/data-deletion' },
+  { label: 'Disclaimer', href: '/disclaimer' },
+]
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-dark text-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+    <footer className="mt-24 bg-navy-900 text-white">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)]">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-primary-dark font-bold text-lg">
-                SA
-              </div>
-              <div className="leading-tight">
-                <span className="block text-lg font-bold">Sahil Advisory</span>
-                <span className="block text-[10px] uppercase tracking-[0.2em] text-white/60">
-                  Cost Accountants
-                </span>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-600 font-bold text-white">SA</span>
+              <span className="leading-tight">
+                <span className="block text-base font-extrabold">{SITE.name}</span>
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-white/50">Tax and Compliance</span>
+              </span>
             </div>
-            <p className="text-sm text-white/70 leading-relaxed">
-              Delivering smart solutions in Tax, Audit, Accounting and Business
-              Consultancy. Accurate advice. Practical strategies. Trusted
-              support.
-            </p>
-            <div className="mt-4 flex gap-3">
-              <a
-                href="https://www.instagram.com/sahil_advisory"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-                aria-label="Instagram"
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                </svg>
-              </a>
-              <a
-                href="https://www.facebook.com/sahiladvisory"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-                aria-label="Facebook"
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
-              </a>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">{SITE.shortDescription}</p>
+            <div className="mt-5 flex items-center gap-2 text-xs text-white/60">
+              <Lock className="h-3.5 w-3.5 text-green-500" />
+              Documents encrypted at rest. Visible only to your assigned expert.
+            </div>
+            <div className="mt-5 flex gap-2">
+              {SITE.social.instagram && (
+                <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white/10 px-3 py-2 text-xs font-semibold hover:bg-white/20">Instagram</a>
+              )}
+              {SITE.social.facebook && (
+                <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-white/10 px-3 py-2 text-xs font-semibold hover:bg-white/20">Facebook</a>
+              )}
             </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">
-              Our Services
-            </h3>
-            <ul className="space-y-2.5">
-              {services.map((s) => (
-                <li key={s}>
-                  <a
-                    href="#services"
-                    className="text-sm text-white/60 hover:text-accent transition-colors py-1 inline-block"
-                  >
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FooterCol title="Services" links={services} />
+          <FooterCol title="Calculators" links={[...LIVE_CALCULATORS.map((c) => ({ label: c.name, href: `/calculators/${c.slug}` })), ...resources.slice(0, 3)]} />
+          <FooterCol title="Company" links={[...company, ...resources.slice(3)]} />
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">
-              Quick Links
-            </h3>
-            <ul className="space-y-2.5">
-              {quickLinks.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    className="text-sm text-white/60 hover:text-accent transition-colors py-1 inline-block"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white/90 mb-4">
-              Contact Info
-            </h3>
-            <ul className="space-y-4">
-              <li className="flex gap-3 text-sm text-white/60">
-                <Phone className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
-                <a href="tel:+917888412302" className="hover:text-accent transition-colors">
-                  +91 78884 12302
-                </a>
+            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-white/80">Contact</h3>
+            <ul className="mt-4 space-y-3 text-sm text-white/70">
+              <li className="flex gap-2.5">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                <a href={`tel:${SITE.phoneE164}`} className="font-mono hover:text-white">{SITE.phoneDisplay}</a>
               </li>
-              <li className="flex gap-3 text-sm text-white/60">
-                <Mail className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
-                <a href="mailto:sahiladvisory1@gmail.com" className="hover:text-accent transition-colors">
-                  sahiladvisory1@gmail.com
-                </a>
+              <li className="flex gap-2.5">
+                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                <a href={WHATSAPP_DEFAULT} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp us</a>
               </li>
-              <li className="flex gap-3 text-sm text-white/60">
-                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
-                <span>
-                  Sector 12, Panchkula &<br />
-                  Sector 63, Chandigarh, India
-                </span>
+              <li className="flex gap-2.5">
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                <a href={`mailto:${SITE.email}`} className="hover:text-white break-all">{SITE.email}</a>
               </li>
+              <li className="flex gap-2.5">
+                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                <span>{SITE.hours}</span>
+              </li>
+              <li className="flex gap-2.5">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                <address className="not-italic">
+                  {SITE.address.street}, {SITE.address.locality} {SITE.address.postalCode}
+                  <br />
+                  Also at {SITE.address.secondOffice}
+                </address>
+              </li>
+              {SITE.gstin && <li className="font-mono text-xs text-white/50">GSTIN: {SITE.gstin}</li>}
             </ul>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-white/40">
-            &copy; {new Date().getFullYear()} Sahil Advisory. All rights
-            reserved.
-          </p>
-          <p className="text-xs text-white/40">
-            Advise &middot; Analyze &middot; Achieve
-          </p>
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <p className="max-w-4xl text-xs leading-relaxed text-white/50">{FOOTER_DISCLAIMER}</p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/60">
+              {legal.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="hover:text-white">{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-white/40">© {new Date().getFullYear()} {SITE.legalName}. All rights reserved.</p>
+          </div>
         </div>
       </div>
     </footer>
-  );
+  )
+}
+
+function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+  return (
+    <div>
+      <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-white/80">{title}</h3>
+      <ul className="mt-4 space-y-2.5">
+        {links.map((l) => (
+          <li key={l.href}>
+            <Link href={l.href} className="text-sm text-white/65 hover:text-white">{l.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }

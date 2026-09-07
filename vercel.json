@@ -1,0 +1,6 @@
+{
+  "regions": ["bom1"],
+  "crons": [
+    { "path": "/api/indexnow/cron", "schedule": "30 22 * * *" }
+  ]
+}

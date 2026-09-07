@@ -1,39 +1,15 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from 'next/og'
 
-export const size = {
-  width: 180,
-  height: 180,
-};
-
-export const contentType = "image/png";
+export const size = { width: 180, height: 180 }
+export const contentType = 'image/png'
 
 export default function AppleIcon() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #0f2440, #1b3a5c)",
-          borderRadius: 40,
-        }}
-      >
-        <span
-          style={{
-            fontSize: 90,
-            fontWeight: 800,
-            color: "#c8a84e",
-          }}
-        >
-          SA
-        </span>
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0B1F3A', borderRadius: 40 }}>
+        <span style={{ fontSize: 88, fontWeight: 800, color: '#34D399', letterSpacing: -2 }}>SA</span>
       </div>
     ),
-    {
-      ...size,
-    }
-  );
+    { ...size }
+  )
 }

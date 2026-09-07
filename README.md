@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sahil Advisory
 
-## Getting Started
+Tax and compliance services platform: fixed-price ITR, GST, TDS, business registrations and notice replies, with free calculators, guides and a live compliance calendar.
 
-First, run the development server:
+Next.js 16 App Router, React 19, Tailwind CSS 4, TypeScript, pnpm, deployed on Vercel (`bom1`).
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # fill in what you need; nothing is required for local browsing
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`pnpm build` to build, `pnpm lint` to lint, `pnpm exec tsc --noEmit -p tsconfig.json` to type-check.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| What | Where |
+|---|---|
+| Brand, contact, GSTIN, FY constants | `app/lib/site.ts` |
+| Tax rates, slabs, due dates, thresholds | `app/lib/tax/rules/fy2025-26.ts` |
+| Tax computation | `app/lib/tax/compute.ts` |
+| Service catalogue and prices | `app/lib/services.ts` |
+| Compliance deadlines | `app/lib/due-dates.ts` |
+| Calculator registry and copy | `app/lib/calculators.ts` |
+| Calculator UIs | `app/components/calculators/` |
+| Guides | `app/lib/guides/content/` |
+| Experts panel | `app/lib/experts.ts` |
+| SEO helpers | `app/lib/seo.ts` |
 
-## Learn More
+Adding an entry to a registry automatically creates its route, sitemap entry, hub card and IndexNow submission.
 
-To learn more about Next.js, take a look at the following resources:
+## Read before contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`AGENTS.md` for conventions, `docs/PROJECT.md` for current state and open decisions, `TAX-PLATFORM-BLUEPRINT.md` for the full brief.
