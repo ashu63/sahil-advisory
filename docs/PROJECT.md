@@ -80,6 +80,12 @@ must stay that way:
 Never move a service between those rows without checking the statute. The
 cost audit line is a genuine differentiator: it is work a CA cannot sign.
 
+## Backend
+
+Not built yet. The design, the data model and the build order are in
+`docs/BACKEND.md`. The immediate gap: `RESEND_API_KEY` is unset in production,
+so callback-form leads reach nothing but Vercel's runtime logs.
+
 ## Verification commands
 
 ```bash
