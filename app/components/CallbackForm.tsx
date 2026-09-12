@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react'
 import { CheckCircle2, Loader2, ShieldCheck } from 'lucide-react'
 import { whatsappLink } from '@/app/lib/site'
+import { track, identifyLead } from '@/app/lib/analytics'
 
 type Props = {
   service?: string
@@ -41,13 +42,14 @@ export default function CallbackForm({
           hp: (document.getElementById('lead-hp') as HTMLInputElement | null)?.value ?? '',
         }),
       })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Something went wrong')
+      const json = (await res.json()) as { ok?: boolean; leadId?: string; error?: string }
+      if (!res.ok) {
+        track('lead_failed', { service: service ?? 'general', reason: json.error ?? String(res.status) })
+        throw new Error(json.error || 'Something went wrong')
+      }
       setStatus('done')
-      try {
-        // GA4 conversion event (no-op if gtag absent)
-        ;(window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'lead_submitted', { service: service ?? 'general' })
-      } catch {}
+      track('lead_submitted', { service: service ?? 'general', detail: values.detail, lead_id: json.leadId })
+      if (json.leadId) identifyLead(json.leadId, { service: service ?? 'general' })
     } catch (err) {
       setStatus('error')
       setError((err as Error).message)

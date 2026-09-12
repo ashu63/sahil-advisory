@@ -4,6 +4,7 @@ import { buildMetadata, breadcrumbJsonLd, graph, webPageJsonLd } from '@/app/lib
 import { SITE, WHATSAPP_DEFAULT } from '@/app/lib/site'
 import JsonLd from '@/app/components/JsonLd'
 import CallbackForm from '@/app/components/CallbackForm'
+import TrackedLink from '@/app/components/TrackedLink'
 import { Container, Breadcrumbs, SectionHeading } from '@/app/components/ui'
 
 export const metadata: Metadata = buildMetadata({
@@ -34,7 +35,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-bold text-navy-900">{it.title}</p>
                     <p className="text-sm text-text-2">{it.text}</p>
-                    <a href={it.href} target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined} className="mt-1 inline-block font-mono text-sm font-semibold text-green-700 hover:underline">{it.label}</a>
+                    <TrackedLink event={it.title === 'Call' ? 'call_click' : 'whatsapp_click'} props={{ placement: 'contact', channel: it.title.toLowerCase() }} href={it.href} target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined} className="mt-1 inline-block font-mono text-sm font-semibold text-green-700 hover:underline">{it.label}</TrackedLink>
                   </div>
                 </li>
               ))}

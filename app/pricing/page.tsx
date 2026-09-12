@@ -6,6 +6,7 @@ import { CATEGORIES, CATEGORY_PATH, CONSULTATIONS, servicesIn, servicePath, unit
 import { formatINR } from '@/app/lib/format'
 import JsonLd from '@/app/components/JsonLd'
 import FaqJsonLd from '@/app/components/FaqJsonLd'
+import PageEvent from '@/app/components/PageEvent'
 import { Container, Breadcrumbs, SectionHeading, FaqAccordion, CtaBand, Badge } from '@/app/components/ui'
 
 export const metadata: Metadata = buildMetadata({
@@ -48,6 +49,7 @@ export default function PricingPage() {
         )}
       />
       <FaqJsonLd faqs={FAQS} />
+      <PageEvent event="pricing_view" />
       <Container className="py-10 lg:py-16">
         <Breadcrumbs crumbs={[{ name: 'Pricing', path: '/pricing' }]} />
         <div className="mt-6">

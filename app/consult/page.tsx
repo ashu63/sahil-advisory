@@ -8,6 +8,7 @@ import { publishedExperts } from '@/app/lib/experts'
 import JsonLd from '@/app/components/JsonLd'
 import FaqJsonLd from '@/app/components/FaqJsonLd'
 import CallbackForm from '@/app/components/CallbackForm'
+import TrackedLink from '@/app/components/TrackedLink'
 import { Container, Breadcrumbs, SectionHeading, FaqAccordion, Badge } from '@/app/components/ui'
 import { ExpertCard } from '@/app/components/cards'
 
@@ -80,9 +81,9 @@ export default function ConsultPage() {
                     <p className="text-xs text-muted">{k.duration} minutes</p>
                     <p className="mt-3 font-mono tabular"><span className="text-sm text-muted line-through">{formatINR(k.mrp)}</span> <span className="text-3xl font-bold text-navy-900">{formatINR(k.price)}</span> <span className="text-xs text-muted">+ GST</span></p>
                     <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{k.desc}</p>
-                    <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-5 rounded-lg bg-green-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-green-700">
+                    <TrackedLink event="consult_click" props={{ session: k.slug, price: k.price }} href={wa} target="_blank" rel="noopener noreferrer" className="mt-5 rounded-lg bg-green-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-green-700">
                       Book on WhatsApp
-                    </a>
+                    </TrackedLink>
                   </article>
                 )
               })}

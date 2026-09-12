@@ -84,19 +84,28 @@ cost audit line is a genuine differentiator: it is work a CA cannot sign.
 
 ## Backend
 
-Design and build order: `docs/BACKEND.md`.
+Design and build order: `docs/BACKEND.md`. Shape and running cost:
+`docs/ARCHITECTURE.md`. Setup, step by step: `docs/SETUP-BACKEND.md`.
 
-**Step 1 is built** (leads to Supabase plus a WhatsApp alert) but is dormant
-until the environment variables are set. Setup steps: `docs/SETUP-LEADS.md`.
-Until then leads reach only Vercel's runtime logs. Steps 2 onward (auth,
-orders, payments, portals) are not started.
+**Built, dormant until env vars are set:**
+
+| Piece | Where | Switched on by |
+|---|---|---|
+| Leads to Postgres, alert log | `app/api/leads/route.ts`, `app/lib/db/*` | `DATABASE_URL`, `DIRECT_URL` |
+| Email + WhatsApp alerts | `app/lib/notify/*` | `RESEND_API_KEY`, `WHATSAPP_PROVIDER` |
+| Passwordless sign-in, roles | `auth.ts`, `app/login`, `app/lib/auth-guard.ts` | `AUTH_SECRET`, `ADMIN_EMAILS` |
+| Admin inbox | `app/admin/*`, `app/lib/leads/*` | Sign-in plus database |
+| Analytics events | `app/lib/analytics`, `instrumentation-client.ts`, `TrackedLink`, `PageEvent` | `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_CLARITY_ID` |
+
+Until then leads reach only Vercel's runtime logs. Not started: client
+dashboard, orders, payments, document upload.
 
 ## Verification commands
 
 ```bash
 pnpm exec tsc --noEmit -p tsconfig.json   # types
 pnpm lint                                  # eslint
-pnpm build                                 # 118 static pages
+pnpm build                                 # 241 pages
 ```
 
 Tax math was checked against known values (₹12.75L salary is nil under the new

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Phone, Mail, MapPin, Clock, MessageCircle, Lock } from 'lucide-react'
 import { SITE, FOOTER_DISCLAIMER, WHATSAPP_DEFAULT } from '@/app/lib/site'
 import { LIVE_CALCULATORS } from '@/app/lib/calculators'
+import TrackedLink from './TrackedLink'
 
 const services = [
   { label: 'ITR Filing', href: '/services/itr' },
@@ -82,11 +83,11 @@ export default function Footer() {
             <ul className="mt-4 space-y-3 text-sm text-white/70">
               <li className="flex gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                <a href={`tel:${SITE.phoneE164}`} className="font-mono hover:text-white">{SITE.phoneDisplay}</a>
+                <TrackedLink event="call_click" props={{ placement: 'footer' }} href={`tel:${SITE.phoneE164}`} className="font-mono hover:text-white">{SITE.phoneDisplay}</TrackedLink>
               </li>
               <li className="flex gap-2.5">
                 <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
-                <a href={WHATSAPP_DEFAULT} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp us</a>
+                <TrackedLink event="whatsapp_click" props={{ placement: 'footer' }} href={WHATSAPP_DEFAULT} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp us</TrackedLink>
               </li>
               <li className="flex gap-2.5">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />

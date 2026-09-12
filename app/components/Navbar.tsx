@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, FileText, Receipt, Percent, Building2, ScrollText, Headset, Calculator, BookOpen, CalendarClock, ClipboardCheck } from 'lucide-react'
 import { SITE } from '@/app/lib/site'
+import { track } from '@/app/lib/analytics'
 
 const returns = [
   { label: 'ITR Filing', desc: 'Salaried, traders, freelancers, NRI', href: '/services/itr', icon: FileText },
@@ -123,7 +124,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <a href={`tel:${SITE.phoneE164}`} className="px-3 text-sm font-semibold text-navy-900 font-mono tabular">{SITE.phoneDisplay}</a>
+          <a href={`tel:${SITE.phoneE164}`} onClick={() => track('call_click', { placement: 'nav' })} className="px-3 text-sm font-semibold text-navy-900 font-mono tabular">{SITE.phoneDisplay}</a>
           <Link href="/consult" className="rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700">
             Talk to an expert
           </Link>
@@ -149,7 +150,7 @@ export default function Navbar() {
             <Link href="/consult" className="block rounded-lg bg-green-600 px-4 py-3 text-center text-sm font-semibold text-white">
               Talk to an expert
             </Link>
-            <a href={`tel:${SITE.phoneE164}`} className="block text-center text-sm font-semibold text-navy-900 font-mono">{SITE.phoneDisplay}</a>
+            <a href={`tel:${SITE.phoneE164}`} onClick={() => track('call_click', { placement: 'nav_mobile' })} className="block text-center text-sm font-semibold text-navy-900 font-mono">{SITE.phoneDisplay}</a>
           </div>
         </div>
       )}

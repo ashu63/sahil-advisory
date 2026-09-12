@@ -11,7 +11,10 @@ import { REVIEWER } from '@/app/lib/experts'
 import { CALCULATOR_COMPONENTS } from '@/app/components/calculators'
 import JsonLd from '@/app/components/JsonLd'
 import FaqJsonLd from '@/app/components/FaqJsonLd'
-import { Container, Breadcrumbs, FaqAccordion, Button } from '@/app/components/ui'
+import CalculatorTracker from '@/app/components/CalculatorTracker'
+import TrackedLink from '@/app/components/TrackedLink'
+import { ArrowRight as ArrowRightIcon } from 'lucide-react'
+import { Container, Breadcrumbs, FaqAccordion } from '@/app/components/ui'
 import { CalculatorCard, GuideCard } from '@/app/components/cards'
 
 type Params = { slug: string }
@@ -70,7 +73,7 @@ export default async function CalculatorPage({ params }: { params: Promise<Param
         </header>
 
         <div className="mt-8">
-          {Tool ? <Tool /> : <p className="rounded-xl border border-border bg-bg-alt p-6 text-sm text-muted">This calculator is being finalised.</p>}
+          {Tool ? <CalculatorTracker slug={c.slug}><Tool /></CalculatorTracker> : <p className="rounded-xl border border-border bg-bg-alt p-6 text-sm text-muted">This calculator is being finalised.</p>}
         </div>
 
         {service && (
@@ -79,7 +82,7 @@ export default async function CalculatorPage({ params }: { params: Promise<Param
               <p className="text-base font-bold text-navy-900">{c.ctaText}</p>
               <p className="mt-1 text-sm text-text-2">{service.name}: {service.shortDesc}</p>
             </div>
-            <Button href={servicePath(service)} icon>View plan</Button>
+            <TrackedLink event="calculator_cta_click" props={{ calculator: c.slug, plan: service.slug }} href={servicePath(service)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700">View plan <ArrowRightIcon className="h-4 w-4" aria-hidden /></TrackedLink>
           </div>
         )}
 

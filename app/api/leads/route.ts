@@ -1,14 +1,16 @@
 import { after } from 'next/server'
-import { db, leads } from '@/app/lib/db'
+import { eq, sql } from 'drizzle-orm'
+import { db, leads, notifications, type NotificationStatus } from '@/app/lib/db'
 import { sendWhatsApp } from '@/app/lib/notify/whatsapp'
 import { sendLeadEmail } from '@/app/lib/notify/email'
 import { getClientIP, rateLimit } from '@/app/lib/rate-limit'
+import { SITE } from '@/app/lib/site'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 // after() runs once the response is sent but still counts against the
 // function's budget, so leave room for the database write plus two outbound
-// calls without holding the user's request open.
+// calls without holding the visitor's request open.
 export const maxDuration = 30
 
 type LeadBody = {
@@ -26,7 +28,7 @@ function clean(s: unknown, max: number): string {
   return typeof s === 'string' ? s.trim().slice(0, max) : ''
 }
 
-/** Pull utm_* and gclid out of the page URL the form was submitted from. */
+/** Pull utm_*, gclid and fbclid out of the page URL the form was submitted from. */
 function utmFrom(sourceUrl: string): Record<string, string> | undefined {
   if (!sourceUrl) return undefined
   try {
@@ -71,10 +73,9 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Please enter a valid 10-digit mobile number.' }, { status: 400 })
   }
 
-  // 1. Persist first. If the database is configured, a stored lead is the
-  //    source of truth; notifications are best-effort on top of it.
+  // 1. Persist first. A stored lead is the source of truth; every alert is
+  //    best-effort on top of it and is recorded either way.
   let leadId: string | undefined
-  let stored = false
   if (db) {
     try {
       const [row] = await db
@@ -94,21 +95,22 @@ export async function POST(request: Request) {
         })
         .returning({ id: leads.id })
       leadId = row?.id
-      stored = true
     } catch (err) {
-      // Never fail the visitor's submission because the database is down.
-      // The log line below is then the only record, so keep it complete.
+      // Never fail the visitor because the database is down. The log line
+      // below then becomes the only record, so it carries every field.
       console.error('[lead] db insert failed:', err)
     }
   }
 
-  // Always log. This is the fallback record when the database is unset or
-  // unreachable. Contains no PAN, Aadhaar or document data.
-  console.log('[lead]', JSON.stringify({ leadId, stored, name, phone, service, detail, sourceUrl, at: new Date().toISOString() }))
+  // Always log. Contains no PAN, Aadhaar or document data.
+  console.log('[lead]', JSON.stringify({ leadId, stored: Boolean(leadId), name, phone, service, detail, sourceUrl, at: new Date().toISOString() }))
 
-  // 2. Notify after the response so the visitor is not waiting on WhatsApp
-  //    or email round-trips.
+  // 2. Notify after the response so the visitor is not waiting on WhatsApp or
+  //    email round-trips. Each attempt is written to `notifications` so the
+  //    inbox shows what went out and why anything failed.
   after(async () => {
+    const waTo = process.env.WHATSAPP_NOTIFY_TO || SITE.whatsappNumber
+    const emailTo = process.env.LEADS_TO_EMAIL || SITE.email
     const waText = [
       'New lead on the website',
       `Name: ${name}`,
@@ -133,20 +135,45 @@ export async function POST(request: Request) {
     if (!wa.sent) console.warn('[lead] whatsapp not sent:', wa.reason)
     if (!mail.sent) console.warn('[lead] email not sent:', mail.reason)
 
-    // Record that someone was actually told, so an unnotified lead is visible
-    // in the inbox rather than silently sitting there.
-    if (db && leadId && (wa.sent || mail.sent)) {
-      try {
-        const { sql } = await import('drizzle-orm')
+    if (!db) return
+    // "skipped" means the channel was not configured at all, which is worth
+    // distinguishing from a provider that was called and failed.
+    const statusOf = (r: { sent: boolean; reason?: string }): NotificationStatus =>
+      r.sent ? 'sent' : /not set|not configured/i.test(r.reason ?? '') ? 'skipped' : 'failed'
+    try {
+      await db.insert(notifications).values([
+        {
+          leadId,
+          channel: 'whatsapp',
+          provider: wa.sent ? wa.provider : process.env.WHATSAPP_PROVIDER || null,
+          kind: 'lead_alert',
+          to: waTo,
+          subject: process.env.WHATSAPP_TEMPLATE_NAME || null,
+          body: waText,
+          status: statusOf(wa),
+          error: wa.sent ? null : wa.reason,
+        },
+        {
+          leadId,
+          channel: 'email',
+          provider: 'resend',
+          kind: 'lead_alert',
+          to: emailTo,
+          subject: `New callback request: ${name}`,
+          status: statusOf(mail),
+          error: mail.sent ? null : mail.reason,
+        },
+      ])
+      if (leadId && (wa.sent || mail.sent)) {
         await db
           .update(leads)
           .set({ notifiedCount: sql`${leads.notifiedCount} + 1`, updatedAt: new Date() })
-          .where(sql`${leads.id} = ${leadId}`)
-      } catch (err) {
-        console.error('[lead] notified_count update failed:', err)
+          .where(eq(leads.id, leadId))
       }
+    } catch (err) {
+      console.error('[lead] notification log failed:', err)
     }
   })
 
-  return Response.json({ ok: true })
+  return Response.json({ ok: true, leadId })
 }

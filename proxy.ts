@@ -39,5 +39,7 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|opengraph-image|twitter-image|api/).*)'],
+  // /ingest is the PostHog proxy: its paths end in a slash by design and must
+  // not hit the trailing-slash redirect above.
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|opengraph-image|twitter-image|api/|ingest/).*)'],
 }

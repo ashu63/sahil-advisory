@@ -8,6 +8,13 @@
       "when": 1788763444796,
       "tag": "0000_create_leads",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789204291502,
+      "tag": "0001_auth_activities_notifications",
+      "breakpoints": true
     }
   ]
 }

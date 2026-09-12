@@ -13,6 +13,8 @@ import JsonLd from '@/app/components/JsonLd'
 import FaqJsonLd from '@/app/components/FaqJsonLd'
 import DeadlineWidget from '@/app/components/DeadlineWidget'
 import CallbackForm from '@/app/components/CallbackForm'
+import TrackedLink from '@/app/components/TrackedLink'
+import PageEvent from '@/app/components/PageEvent'
 import { Container, Breadcrumbs, TrustStrip, ProcessSteps, FaqAccordion, CtaBand, CheckList, PriceTag, Badge, SectionHeading } from '@/app/components/ui'
 import { PlanCard, ExpertCard, CalculatorCard, GuideCard } from '@/app/components/cards'
 
@@ -90,6 +92,7 @@ export default async function SkuPage({ params }: { params: Promise<Params> }) {
     <>
       <JsonLd data={jsonLd} />
       <FaqJsonLd faqs={faqs} />
+      <PageEvent event="plan_view" props={{ plan: s.slug, category: c.id, price: s.price ?? undefined }} />
 
       <section className="bg-[linear-gradient(to_bottom,_#ffffff,_var(--bg-alt))]">
         <Container className="py-8 lg:py-12">
@@ -110,9 +113,9 @@ export default async function SkuPage({ params }: { params: Promise<Params> }) {
                   <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-green-600" /> Reviewed by {REVIEWER.name}</span>
                 </div>
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700">
+                  <TrackedLink event="plan_cta_click" props={{ plan: s.slug, category: c.id, placement: 'sku_hero' }} href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700">
                     Get started on WhatsApp <ArrowRight className="h-4 w-4" />
-                  </a>
+                  </TrackedLink>
                   <Link href="/consult" className="inline-flex items-center rounded-lg border border-border-strong bg-white px-5 py-3 text-sm font-semibold text-navy-900 hover:bg-bg-alt">
                     Ask a question first
                   </Link>

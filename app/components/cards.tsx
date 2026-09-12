@@ -8,6 +8,7 @@ import type { CalculatorDef } from '@/app/lib/calculators'
 import type { Guide } from '@/app/lib/guides/types'
 import { guidePath } from '@/app/lib/guides'
 import { whatsappLink } from '@/app/lib/site'
+import TrackedLink from './TrackedLink'
 
 // `hideBadge` is for cross-category grids (the home page featured row), where
 // several category-level "most popular" plans sit together and the badge would
@@ -42,9 +43,9 @@ export function PlanCard({ service, compact, hideBadge }: { service: Service; co
         <Link href={href} className="rounded-lg border border-border-strong px-3 py-2 text-center text-sm font-semibold text-navy-900 hover:bg-bg-alt">
           View details
         </Link>
-        <a href={wa} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-green-700">
+        <TrackedLink event="plan_cta_click" props={{ plan: service.slug, category: service.category, placement: 'card' }} href={wa} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-green-700">
           Get started
-        </a>
+        </TrackedLink>
       </div>
     </article>
   )
